@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaEye } from 'react-icons/fa';
 import { FaEyeSlash } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
+import { createUser } from '../api/user-api.js';
 import LandingPageNavBar from './LandingPageNavBar.jsx';
 
 export default function Register() {
@@ -20,6 +21,10 @@ export default function Register() {
       setPasswordType('text');
     }
   }, [passwordHidden]);
+
+  const handleSubmit = () => {
+    createUser({ username, password, firstName, lastName });
+  };
 
   return (
     <>
@@ -82,7 +87,7 @@ export default function Register() {
               </div>
             )}
           </div>
-          <Link to="/manager-dashboard" className="signup-button">
+          <Link onClick={() => handleSubmit()} className="signup-button">
             Create account
           </Link>
         </div>

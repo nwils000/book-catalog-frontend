@@ -4,7 +4,7 @@ const baseUrl = 'http://127.0.0.1:8000';
 
 export const createUser = ({ username, password, firstName, lastName }) => {
   axios({
-    mathod: 'post',
+    method: 'post',
     url: `${baseUrl}/create-user/`,
     data: {
       username,
