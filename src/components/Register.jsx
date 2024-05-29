@@ -7,6 +7,8 @@ import LandingPageNavBar from './LandingPageNavBar.jsx';
 
 export default function Register() {
   const [passwordHidden, setPasswordHidden] = useState(true);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordType, setPasswordType] = useState('password');
@@ -31,6 +33,26 @@ export default function Register() {
           Already have an account? <Link to="/login">Sign in</Link>
         </p>
         <div className="signup-input-wrapper">
+          <div className="label-input-wrapper" style={{ position: 'relative' }}>
+            <label htmlFor="firstName">First Name</label>
+            <input
+              id="firstName"
+              type="text"
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
+              placeholder="Reece"
+            />
+          </div>
+          <div className="label-input-wrapper" style={{ position: 'relative' }}>
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              id="lastName"
+              type="text"
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+              placeholder="Walter"
+            />
+          </div>
           <div className="label-input-wrapper" style={{ position: 'relative' }}>
             <label htmlFor="username">Username</label>
             <input
