@@ -2,10 +2,13 @@ import '../styles/login.css';
 import { Link } from 'react-router-dom';
 import { FaEye } from 'react-icons/fa';
 import { FaEyeSlash } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/authContext.js';
 import LandingPageNavBar from './LandingPageNavBar.jsx';
 
 export default function Login() {
+  const { auth } = useContext(AuthContext);
+
   const [passwordHidden, setPasswordHidden] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
