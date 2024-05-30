@@ -112,6 +112,37 @@ export const deleteBook = async ({ auth, username, title, author }) => {
     .catch((error) => console.log('Error: ', error));
 };
 
+export const updateBook = async ({
+  auth,
+  prev_title,
+  title,
+  author,
+  description,
+  genre,
+}) => {
+  try {
+    const response = await axios({
+      method: 'put',
+      url: `${baseUrl}/user-update-book/`,
+      headers: {
+        Authorization: `Bearer ${auth.accessToken}`,
+      },
+      data: {
+        prev_title,
+        title,
+        author,
+        description,
+        genre,
+      },
+    });
+    console.log('Update Book Response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};
+
 export const deleteBookAndFetchUser = async ({
   auth,
   info,
@@ -137,6 +168,23 @@ export const createBookAndFetchUser = async ({
 }) => {
   try {
     await addBookToBookshelf({ auth, info, title, author, genre, description });
+    await fetchUser({ auth, info });
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+export const updateBookAndFetchUser = async ({
+  description,
+  genre,
+  auth,
+  info,
+  title,
+  author,
+  prev_title,
+}) => {
+  try {
+    await updateBook({ prev_title, auth, title, author, description, genre });
     await fetchUser({ auth, info });
   } catch (error) {
     console.log('Error: ', error);
