@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { updateBookAndFetchUser } from '../api/user-api';
 import { UserInfoContext } from '../context/userInfoContext';
 import { AuthContext } from '../context/authContext';
+import '../styles/user-dashboard.css';
 
 export default function UpdateBookForm({ initialBookData, onUpdated }) {
   const { info } = useContext(UserInfoContext);
@@ -60,45 +61,51 @@ export default function UpdateBookForm({ initialBookData, onUpdated }) {
   ];
 
   return (
-    <div>
-      <label htmlFor="title">Title</label>
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        type="text"
-        id="title"
-      />
-
-      <label htmlFor="author">Author</label>
-      <input
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
-        type="text"
-        id="author"
-      />
-
-      <label htmlFor="description">Description</label>
-      <input
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        type="text"
-        id="description"
-      />
-
-      <label htmlFor="genre">Genre</label>
-      <select
-        value={genre}
-        onChange={(e) => setGenre(e.target.value)}
-        id="genre"
-      >
-        {genres.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-
-      <button onClick={handleSubmit}>Update Book</button>
+    <div className="update-book-form">
+      <div className="label-input-wrapper">
+        <label htmlFor="title">Title</label>
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          type="text"
+          id="title"
+        />
+      </div>
+      <div className="label-input-wrapper">
+        <label htmlFor="author">Author</label>
+        <input
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+          type="text"
+          id="author"
+        />
+      </div>
+      <div className="label-input-wrapper">
+        <label htmlFor="description">Description</label>
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          type="text"
+          id="description"
+        />
+      </div>
+      <div className="label-input-wrapper">
+        <label htmlFor="genre">Genre</label>
+        <select
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)}
+          id="genre"
+        >
+          {genres.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button onClick={handleSubmit} className="submit-button">
+        Update Book
+      </button>
     </div>
   );
 }

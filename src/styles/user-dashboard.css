@@ -1,0 +1,108 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 2rem;
+}
+
+.dashboard p {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.dashboard .book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.dashboard .book-item {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.dashboard .book-item .title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.2rem;
+}
+
+.dashboard .book-item .author {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 0.8rem;
+}
+
+.dashboard .book-item .description {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 0.8rem;
+  text-align: justify;
+  overflow: hidden;
+}
+
+.dashboard .book-item .genre {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.dashboard .book-item div {
+  font-size: 0.9rem;
+}
+
+.dashboard .book-item button,
+.submit-button {
+  align-self: start;
+  background-color: #995722;
+  color: white;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  margin-right: 10px;
+  margin-left: 0;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.dashboard .book-item button:hover {
+  opacity: 0.9;
+}
+
+.dashboard .label-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard .label-input-wrapper label {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.dashboard .label-input-wrapper input,
+.dashboard .label-input-wrapper select {
+  height: 2.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.dashboard .add-book-form,
+.dashboard .update-book-form {
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: 2rem;
+}
