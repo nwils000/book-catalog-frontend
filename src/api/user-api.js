@@ -56,3 +56,89 @@ export const fetchUser = async ({ auth, info }) => {
     })
     .catch((error) => console.log('Error: ', error));
 };
+
+export const addBookToBookshelf = async ({
+  auth,
+  info,
+  title,
+  author,
+  description,
+  genre,
+}) => {
+  console.log('Access Token:', auth.accessToken);
+  console.log('Base URL:', baseUrl);
+  console.log('info, ', info);
+  let username = info.username;
+  await axios({
+    method: 'post',
+    url: `${baseUrl}/user-create-book/`,
+    headers: {
+      Authorization: `Bearer ${auth.accessToken}`,
+    },
+    data: {
+      title,
+      author,
+      description,
+      genre,
+      username,
+    },
+  })
+    .then((response) => {
+      console.log('Fetch user response: ', response);
+      return response;
+    })
+    .catch((error) => console.log('Error: ', error));
+};
+
+export const deleteBook = async ({ auth, username, title, author }) => {
+  console.log('Access Token:', auth.accessToken);
+  console.log('Base URL:', baseUrl);
+  await axios({
+    method: 'put',
+    url: `${baseUrl}/user-delete-book/`,
+    headers: {
+      Authorization: `Bearer ${auth.accessToken}`,
+    },
+    data: {
+      title,
+      author,
+      username,
+    },
+  })
+    .then((response) => {
+      console.log('Fetch user response: ', response);
+      return response;
+    })
+    .catch((error) => console.log('Error: ', error));
+};
+
+export const deleteBookAndFetchUser = async ({
+  auth,
+  info,
+  username,
+  title,
+  author,
+}) => {
+  try {
+    await deleteBook({ auth, username, title, author });
+    await fetchUser({ auth, info });
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+export const createBookAndFetchUser = async ({
+  description,
+  genre,
+  auth,
+  info,
+  title,
+  author,
+}) => {
+  try {
+    await addBookToBookshelf({ auth, info, title, author, genre, description });
+    await fetchUser({ auth, info });
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};

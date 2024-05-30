@@ -68,10 +68,13 @@ const router = createBrowserRouter([
 
 const UserInfoContextProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState('');
+  const [username, setUsername] = useState('');
 
   const info = {
     userInfo,
     setUserInfo,
+    username,
+    setUsername,
   };
 
   return (

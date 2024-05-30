@@ -1,9 +1,19 @@
 import { useContext } from 'react';
 import { UserInfoContext } from '../context/userInfoContext';
+import { AuthContext } from '../context/authContext';
+import { deleteBookAndFetchUser } from '../api/user-api';
+import AddBookForm from './AddBookForm';
 
 export default function UserDashboard() {
   const { info } = useContext(UserInfoContext);
+  const { auth } = useContext(AuthContext);
+
   console.log(info.userInfo.bookshelves[0]);
+
+  const handleDelete = (title, author) => {
+    let username = info.username;
+    deleteBookAndFetchUser({ auth, info, username, title, author });
+  };
 
   return (
     <>
@@ -17,6 +27,9 @@ export default function UserDashboard() {
                 <div>{book.author}</div>
                 <div>{book.description}</div>
                 <div>{book.genre}</div>
+                <button onClick={() => handleDelete(book.title, book.author)}>
+                  X
+                </button>
               </div>
             );
           })
@@ -24,6 +37,7 @@ export default function UserDashboard() {
           <div>No books to show!</div>
         )}
       </div>
+      <AddBookForm />
     </>
   );
 }

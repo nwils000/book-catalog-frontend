@@ -40,6 +40,7 @@ export default function Login() {
   }, [auth.accessToken]);
 
   const submit = async () => {
+    info.setUsername(username);
     try {
       await getToken({ auth, username, password });
     } catch (error) {
