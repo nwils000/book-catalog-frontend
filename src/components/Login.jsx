@@ -3,15 +3,21 @@ import { Link } from 'react-router-dom';
 import { FaEye } from 'react-icons/fa';
 import { FaEyeSlash } from 'react-icons/fa';
 import { useState, useEffect, useContext } from 'react';
+import { getToken } from '../api/user-api.js';
+import { fetchUser } from '../api/user-api.js';
 import { AuthContext } from '../context/authContext.js';
+import { UserInfoContext } from '../context/userInfoContext.js';
 import LandingPageNavBar from './LandingPageNavBar.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  // const { auth } = useContext(AuthContext);
-  const [passwordHidden, setPasswordHidden] = useState(true);
+  const { info } = useContext(UserInfoContext);
+  const { auth } = useContext(AuthContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordHidden, setPasswordHidden] = useState(true);
   const [passwordType, setPasswordType] = useState('password');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (passwordHidden) {
@@ -20,6 +26,26 @@ export default function Login() {
       setPasswordType('text');
     }
   }, [passwordHidden]);
+
+  useEffect(() => {
+    if (auth.accessToken) {
+      fetchUser({ auth, info })
+        .then(() => {
+          navigate('/user-dashboard');
+        })
+        .catch((error) => {
+          console.log('Error: ', error);
+        });
+    }
+  }, [auth.accessToken]);
+
+  const submit = async () => {
+    try {
+      await getToken({ auth, username, password });
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  };
 
   return (
     <>
@@ -62,9 +88,9 @@ export default function Login() {
               </div>
             )}
           </div>
-          <Link to="/employee-dashboard" className="login-button">
+          <span onClick={() => submit()} className="login-button">
             Login
-          </Link>
+          </span>
         </div>
       </div>
     </>
