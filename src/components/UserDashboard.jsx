@@ -10,6 +10,7 @@ export default function UserDashboard() {
   const { info } = useContext(UserInfoContext);
   const { auth } = useContext(AuthContext);
 
+  const [selectedBookshelf, setSelectedBookshelf] = useState(null);
   const [updatingBook, setUpdatingBook] = useState(null);
 
   const handleDelete = (title, author) => {
@@ -19,6 +20,15 @@ export default function UserDashboard() {
 
   const handleUpdateClick = (book) => {
     setUpdatingBook(book);
+  };
+
+  const handleSelectBookshelf = (shelf) => {
+    if (selectedBookshelf && selectedBookshelf.id === shelf.id) {
+      setSelectedBookshelf(null); // Deselect if already selected
+    } else {
+      setSelectedBookshelf(shelf); // Select new bookshelf
+    }
+    setUpdatingBook(null); // Reset updating book when changing bookshelf
   };
 
   const genreDescriptions = {
@@ -52,37 +62,52 @@ export default function UserDashboard() {
 
   return (
     <div className="dashboard">
-      <p>Hi {info.userInfo.first_name}, here are your books:</p>
-      <div className="book-list">
-        {info.userInfo.bookshelves[0] ? (
-          info.userInfo.bookshelves[0].books.map((book) => (
-            <div key={book.id} className="book-item">
-              {updatingBook && updatingBook.id === book.id ? (
-                <UpdateBookForm
-                  initialBookData={updatingBook}
-                  onUpdated={() => setUpdatingBook(null)}
-                />
-              ) : (
-                <div>
-                  <div className="title">{book.title}</div>
-                  <div className="author">{book.author}</div>
-                  <div className="description">{book.description}</div>
-                  <div className="genre">{genreDescriptions[book.genre]}</div>
-                  <button onClick={() => handleDelete(book.title, book.author)}>
-                    Delete
-                  </button>
-                  <button onClick={() => handleUpdateClick(book)}>
-                    Update
-                  </button>
-                </div>
-              )}
-            </div>
-          ))
-        ) : (
-          <div>No books to show!</div>
-        )}
-      </div>
-      <AddBookForm />
+      <p>Hi {info.userInfo.first_name}, manage your bookshelves:</p>
+      {info.userInfo.bookshelves.map((shelf) => (
+        <div key={shelf.id} className="bookshelf">
+          <h2 onClick={() => handleSelectBookshelf(shelf)}>{shelf.title}</h2>
+          {selectedBookshelf && selectedBookshelf.id === shelf.id && (
+            <>
+              <div className="book-list">
+                {shelf.books.length > 0 ? (
+                  shelf.books.map((book) => (
+                    <div key={book.id} className="book-item">
+                      {updatingBook && updatingBook.id === book.id ? (
+                        <UpdateBookForm
+                          initialBookData={updatingBook}
+                          onUpdated={() => setUpdatingBook(null)}
+                        />
+                      ) : (
+                        <div>
+                          <div className="title">{book.title}</div>
+                          <div className="author">{book.author}</div>
+                          <div className="description">{book.description}</div>
+                          <div className="genre">
+                            {genreDescriptions[book.genre]}
+                          </div>
+                          <button
+                            onClick={() =>
+                              handleDelete(book.title, book.author)
+                            }
+                          >
+                            Delete
+                          </button>
+                          <button onClick={() => handleUpdateClick(book)}>
+                            Update
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p>No books in this shelf.</p>
+                )}
+              </div>
+              <AddBookForm />
+            </>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
