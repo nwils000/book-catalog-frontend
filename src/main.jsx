@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -29,6 +29,8 @@ function Layout() {
 function ProtectedUserDashboard({ children }) {
   const { auth } = useContext(AuthContext);
   const location = useLocation();
+
+  useEffect(() => {}, [auth.accessToken]);
   if (!auth.accessToken) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
@@ -68,7 +70,17 @@ const router = createBrowserRouter([
 ]);
 
 const AllBooksContextProvider = ({ children }) => {
-  const [allBooks, setAllBooks] = useState('');
+  const [allBooks, setAllBooks] = useState(() => {
+    return JSON.parse(localStorage.getItem('allBooks')) || '';
+  });
+
+  useEffect(() => {
+    if (allBooks) {
+      localStorage.setItem('allBooks', JSON.stringify(allBooks));
+    } else {
+      localStorage.removeItem('allBooks');
+    }
+  }, [allBooks]);
 
   const books = {
     allBooks,
@@ -83,8 +95,29 @@ const AllBooksContextProvider = ({ children }) => {
 };
 
 const UserInfoContextProvider = ({ children }) => {
-  const [userInfo, setUserInfo] = useState('');
-  const [username, setUsername] = useState('');
+  const [userInfo, setUserInfo] = useState(() => {
+    return JSON.parse(localStorage.getItem('userInfo')) || '';
+  });
+
+  useEffect(() => {
+    if (userInfo) {
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    } else {
+      localStorage.removeItem('userInfo');
+    }
+  }, [userInfo]);
+
+  const [username, setUsername] = useState(() => {
+    return JSON.parse(localStorage.getItem('username')) || '';
+  });
+
+  useEffect(() => {
+    if (username) {
+      localStorage.setItem('username', JSON.stringify(username));
+    } else {
+      localStorage.removeItem('username');
+    }
+  }, [username]);
 
   const info = {
     userInfo,
@@ -101,7 +134,17 @@ const UserInfoContextProvider = ({ children }) => {
 };
 
 const AuthContextProvider = ({ children }) => {
-  const [accessToken, setAccessToken] = useState('');
+  const [accessToken, setAccessToken] = useState(() => {
+    return JSON.parse(localStorage.getItem('accessToken')) || '';
+  });
+
+  useEffect(() => {
+    if (accessToken) {
+      localStorage.setItem('accessToken', JSON.stringify(accessToken));
+    } else {
+      localStorage.removeItem('accessToken');
+    }
+  }, [accessToken]);
 
   const auth = {
     accessToken,

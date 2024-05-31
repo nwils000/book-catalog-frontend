@@ -3,11 +3,13 @@ import { UserInfoContext } from '../context/userInfoContext';
 import { AuthContext } from '../context/authContext';
 import { AllBooksContext } from '../context/allBooksContext';
 import { deleteBookAndFetchUser } from '../api/user-api';
+import { deleteShelfAndFetchUser } from '../api/user-api';
 import { getAllBooks } from '../api/user-api';
 import AddBookForm from './AddBookForm';
 import UpdateBookForm from './UpdateBookForm';
-import '../styles/user-dashboard.css';
 import AddBookshelfForm from './AddBookshelfForm';
+import SearchBooks from './SearchBooks';
+import '../styles/user-dashboard.css';
 
 export default function UserDashboard() {
   const { info } = useContext(UserInfoContext);
@@ -19,6 +21,8 @@ export default function UserDashboard() {
   const [displayedBooks, setDisplayedBooks] = useState(
     books.allBooks ? books.allBooks : []
   );
+  const [searchingDatabase, setSearchingDatabase] = useState(false);
+  const [creatingBook, setCreatingBook] = useState(false);
 
   useEffect(() => {
     getAllBooks({ books });
@@ -54,6 +58,11 @@ export default function UserDashboard() {
       setSelectedBookshelf(shelf);
     }
     setUpdatingBook(null);
+  };
+
+  const handleDeleteSelectBookshelf = (shelf) => {
+    let shelf_title = shelf.title;
+    deleteShelfAndFetchUser({ auth, info, shelf_title });
   };
 
   const genreDescriptions = {
@@ -92,6 +101,7 @@ export default function UserDashboard() {
       {info.userInfo.bookshelves.map((shelf) => (
         <div key={shelf.id} className="bookshelf">
           <h2 onClick={() => handleSelectBookshelf(shelf)}>{shelf.title}</h2>
+          <p onClick={() => handleDeleteSelectBookshelf(shelf)}>X</p>
           {selectedBookshelf && selectedBookshelf.id === shelf.id && (
             <>
               <div className="book-list">
@@ -129,16 +139,36 @@ export default function UserDashboard() {
                   <p>No books in this shelf.</p>
                 )}
               </div>
-              <AddBookForm shelf_title={selectedBookshelf.title} />
+              <button
+                onClick={() => {
+                  setCreatingBook(false);
+                  setSearchingDatabase(true);
+                }}
+              >
+                Select book from database
+              </button>
+              <button
+                onClick={() => {
+                  setSearchingDatabase(false);
+                  setCreatingBook(true);
+                }}
+              >
+                Add book to database/bookshelf
+              </button>
+              {creatingBook && (
+                <AddBookForm shelf_title={selectedBookshelf.title} />
+              )}
+              {searchingDatabase && (
+                <SearchBooks
+                  shelf_title={selectedBookshelf.title}
+                  books={displayedBooks}
+                />
+              )}
             </>
           )}
         </div>
       ))}
       <div>All Books:</div>
-      {displayedBooks &&
-        displayedBooks.map((book) => {
-          return <div>{book.title}</div>;
-        })}
     </div>
   );
 }

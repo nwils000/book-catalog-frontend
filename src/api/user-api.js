@@ -141,6 +141,26 @@ export const deleteBook = async ({
     .catch((error) => console.log('Error: ', error));
 };
 
+export const deleteShelf = async ({ shelf_title, auth }) => {
+  console.log('Access Token:', auth.accessToken);
+  console.log('Base URL:', baseUrl);
+  await axios({
+    method: 'delete',
+    url: `${baseUrl}/user-delete-shelf/`,
+    headers: {
+      Authorization: `Bearer ${auth.accessToken}`,
+    },
+    data: {
+      shelf_title,
+    },
+  })
+    .then((response) => {
+      console.log('Fetch user response: ', response);
+      return response;
+    })
+    .catch((error) => console.log('Error: ', error));
+};
+
 export const updateBook = async ({
   auth,
   prev_title,
@@ -186,6 +206,33 @@ export const getAllBooks = ({ books }) => {
     });
 };
 
+export const addExistingBookToBookshelf = async ({
+  auth,
+  bookId,
+  shelf_title,
+}) => {
+  console.log('Access Token:', auth.accessToken);
+  console.log('Base URL:', baseUrl);
+  await axios({
+    method: 'post',
+    url: `${baseUrl}/add-existing-book-to-shelf/`,
+    headers: {
+      Authorization: `Bearer ${auth.accessToken}`,
+    },
+    data: {
+      id: bookId,
+      shelf_title,
+    },
+  })
+    .then((response) => {
+      console.log('Fetch user response: ', response);
+      return response;
+    })
+    .catch((error) => {
+      console.log('Error: ', error);
+    });
+};
+
 export const deleteBookAndFetchUser = async ({
   auth,
   info,
@@ -196,6 +243,15 @@ export const deleteBookAndFetchUser = async ({
 }) => {
   try {
     await deleteBook({ auth, username, title, author, shelf_title });
+    await fetchUser({ auth, info });
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+export const deleteShelfAndFetchUser = async ({ auth, info, shelf_title }) => {
+  try {
+    await deleteShelf({ shelf_title, auth });
     await fetchUser({ auth, info });
   } catch (error) {
     console.log('Error: ', error);
@@ -247,6 +303,20 @@ export const updateBookAndFetchUser = async ({
 }) => {
   try {
     await updateBook({ prev_title, auth, title, author, description, genre });
+    await fetchUser({ auth, info });
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+export const addExistingBookToBookshelfAndFetchUser = async ({
+  bookId,
+  auth,
+  info,
+  shelf_title,
+}) => {
+  try {
+    await addExistingBookToBookshelf({ auth, bookId, shelf_title });
     await fetchUser({ auth, info });
   } catch (error) {
     console.log('Error: ', error);
