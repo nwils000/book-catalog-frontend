@@ -30,7 +30,6 @@ function ProtectedUserDashboard({ children }) {
   const { auth } = useContext(AuthContext);
   const location = useLocation();
 
-  useEffect(() => {}, [auth.accessToken]);
   if (!auth.accessToken) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

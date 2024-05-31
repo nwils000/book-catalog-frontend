@@ -9,6 +9,7 @@ import AddBookForm from './AddBookForm';
 import UpdateBookForm from './UpdateBookForm';
 import AddBookshelfForm from './AddBookshelfForm';
 import SearchBooks from './SearchBooks';
+import { MdDelete } from 'react-icons/md';
 import '../styles/user-dashboard.css';
 
 export default function UserDashboard() {
@@ -96,12 +97,40 @@ export default function UserDashboard() {
 
   return (
     <div className="dashboard">
-      <p>Hi {info.userInfo.first_name}, manage your bookshelves:</p>
+      <p style={{ fontSize: '2rem' }}>
+        Hi{' '}
+        <span style={{ fontWeight: 'bold' }}>{info.userInfo.first_name}</span>,
+        lets manage your bookshelves:
+      </p>
       {<AddBookshelfForm />}
       {info.userInfo.bookshelves.map((shelf) => (
         <div key={shelf.id} className="bookshelf">
-          <h2 onClick={() => handleSelectBookshelf(shelf)}>{shelf.title}</h2>
-          <p onClick={() => handleDeleteSelectBookshelf(shelf)}>X</p>
+          <div style={{ position: 'relative' }}>
+            <h2
+              style={{ display: 'inline' }}
+              onClick={() => handleSelectBookshelf(shelf)}
+            >
+              <span
+                style={{ fontSize: '.7rem', position: 'relative', bottom: 5 }}
+              >
+                {'Open/Close Shelf =>'}
+              </span>{' '}
+              {shelf.title}
+            </h2>
+            <p
+              className="trashcan"
+              style={{
+                display: 'inline',
+                marginBottom: 0,
+                position: 'relative',
+                top: 3,
+                left: 5,
+              }}
+              onClick={() => handleDeleteSelectBookshelf(shelf)}
+            >
+              <MdDelete />
+            </p>
+          </div>
           {selectedBookshelf && selectedBookshelf.id === shelf.id && (
             <>
               <div className="book-list">
@@ -140,6 +169,7 @@ export default function UserDashboard() {
                 )}
               </div>
               <button
+                className="other-button"
                 onClick={() => {
                   setCreatingBook(false);
                   setSearchingDatabase(true);
@@ -148,6 +178,7 @@ export default function UserDashboard() {
                 Select book from database
               </button>
               <button
+                className="other-button"
                 onClick={() => {
                   setSearchingDatabase(false);
                   setCreatingBook(true);
@@ -168,7 +199,6 @@ export default function UserDashboard() {
           )}
         </div>
       ))}
-      <div>All Books:</div>
     </div>
   );
 }

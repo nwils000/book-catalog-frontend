@@ -29,13 +29,7 @@ export default function Login() {
 
   useEffect(() => {
     if (auth.accessToken) {
-      fetchUser({ auth, info })
-        .then(() => {
-          navigate('/user-dashboard');
-        })
-        .catch((error) => {
-          console.log('Error: ', error);
-        });
+      fetchUser({ auth, info });
     }
   }, [auth.accessToken]);
 
@@ -43,6 +37,7 @@ export default function Login() {
     info.setUsername(username);
     try {
       await getToken({ auth, username, password });
+      navigate('/user-dashboard');
     } catch (error) {
       console.log('Error: ', error);
     }

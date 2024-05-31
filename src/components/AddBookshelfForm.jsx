@@ -21,6 +21,7 @@ export default function AddBookshelfForm() {
         placeholder="Enter new bookshelf name"
       />
       <button
+        className="other-button"
         onClick={(e) => {
           createBookshelfAndFetchUser({ auth, title, info });
           setTitle('');
