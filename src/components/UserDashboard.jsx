@@ -5,6 +5,7 @@ import { deleteBookAndFetchUser } from '../api/user-api';
 import AddBookForm from './AddBookForm';
 import UpdateBookForm from './UpdateBookForm';
 import '../styles/user-dashboard.css';
+import AddBookshelfForm from './AddBookshelfForm';
 
 export default function UserDashboard() {
   const { info } = useContext(UserInfoContext);
@@ -13,9 +14,16 @@ export default function UserDashboard() {
   const [selectedBookshelf, setSelectedBookshelf] = useState(null);
   const [updatingBook, setUpdatingBook] = useState(null);
 
-  const handleDelete = (title, author) => {
+  const handleDelete = (title, author, shelf_title) => {
     let username = info.username;
-    deleteBookAndFetchUser({ auth, info, username, title, author });
+    deleteBookAndFetchUser({
+      auth,
+      info,
+      username,
+      title,
+      author,
+      shelf_title,
+    });
   };
 
   const handleUpdateClick = (book) => {
@@ -24,11 +32,11 @@ export default function UserDashboard() {
 
   const handleSelectBookshelf = (shelf) => {
     if (selectedBookshelf && selectedBookshelf.id === shelf.id) {
-      setSelectedBookshelf(null); // Deselect if already selected
+      setSelectedBookshelf(null);
     } else {
-      setSelectedBookshelf(shelf); // Select new bookshelf
+      setSelectedBookshelf(shelf);
     }
-    setUpdatingBook(null); // Reset updating book when changing bookshelf
+    setUpdatingBook(null);
   };
 
   const genreDescriptions = {
@@ -63,6 +71,7 @@ export default function UserDashboard() {
   return (
     <div className="dashboard">
       <p>Hi {info.userInfo.first_name}, manage your bookshelves:</p>
+      {selectedBookshelf && <AddBookshelfForm />}
       {info.userInfo.bookshelves.map((shelf) => (
         <div key={shelf.id} className="bookshelf">
           <h2 onClick={() => handleSelectBookshelf(shelf)}>{shelf.title}</h2>
@@ -87,7 +96,7 @@ export default function UserDashboard() {
                           </div>
                           <button
                             onClick={() =>
-                              handleDelete(book.title, book.author)
+                              handleDelete(book.title, book.author, shelf.title)
                             }
                           >
                             Delete
@@ -103,7 +112,7 @@ export default function UserDashboard() {
                   <p>No books in this shelf.</p>
                 )}
               </div>
-              <AddBookForm />
+              <AddBookForm shelf_title={selectedBookshelf.title} />
             </>
           )}
         </div>

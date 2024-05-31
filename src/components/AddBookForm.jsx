@@ -4,17 +4,26 @@ import { UserInfoContext } from '../context/userInfoContext';
 import { AuthContext } from '../context/authContext';
 import '../styles/user-dashboard.css';
 
-export default function AddBookForm() {
+export default function AddBookForm(shelf_title) {
   const { info } = useContext(UserInfoContext);
   const { auth } = useContext(AuthContext);
 
+  console.log('shelftitile', shelf_title);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [description, setDescription] = useState('');
   const [genre, setGenre] = useState('');
 
   const handleSubmit = () => {
-    createBookAndFetchUser({ description, genre, auth, info, title, author });
+    createBookAndFetchUser({
+      shelf_title,
+      description,
+      genre,
+      auth,
+      info,
+      title,
+      author,
+    });
   };
 
   const genres = [

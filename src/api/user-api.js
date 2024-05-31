@@ -64,6 +64,7 @@ export const addBookToBookshelf = async ({
   author,
   description,
   genre,
+  shelf_title,
 }) => {
   console.log('Access Token:', auth.accessToken);
   console.log('Base URL:', baseUrl);
@@ -81,6 +82,7 @@ export const addBookToBookshelf = async ({
       description,
       genre,
       username,
+      shelf_title,
     },
   })
     .then((response) => {
@@ -90,7 +92,33 @@ export const addBookToBookshelf = async ({
     .catch((error) => console.log('Error: ', error));
 };
 
-export const deleteBook = async ({ auth, username, title, author }) => {
+export const createBookshelf = async ({ auth, title }) => {
+  console.log('Access Token:', auth.accessToken);
+  console.log('Base URL:', baseUrl);
+  await axios({
+    method: 'post',
+    url: `${baseUrl}/user-create-bookshelf/`,
+    headers: {
+      Authorization: `Bearer ${auth.accessToken}`,
+    },
+    data: {
+      title,
+    },
+  })
+    .then((response) => {
+      console.log('Fetch user response: ', response);
+      return response;
+    })
+    .catch((error) => console.log('Error: ', error));
+};
+
+export const deleteBook = async ({
+  auth,
+  username,
+  title,
+  author,
+  shelf_title,
+}) => {
   console.log('Access Token:', auth.accessToken);
   console.log('Base URL:', baseUrl);
   await axios({
@@ -100,6 +128,7 @@ export const deleteBook = async ({ auth, username, title, author }) => {
       Authorization: `Bearer ${auth.accessToken}`,
     },
     data: {
+      shelf_title,
       title,
       author,
       username,
@@ -149,9 +178,10 @@ export const deleteBookAndFetchUser = async ({
   username,
   title,
   author,
+  shelf_title,
 }) => {
   try {
-    await deleteBook({ auth, username, title, author });
+    await deleteBook({ auth, username, title, author, shelf_title });
     await fetchUser({ auth, info });
   } catch (error) {
     console.log('Error: ', error);
@@ -165,9 +195,27 @@ export const createBookAndFetchUser = async ({
   info,
   title,
   author,
+  shelf_title,
 }) => {
   try {
-    await addBookToBookshelf({ auth, info, title, author, genre, description });
+    await addBookToBookshelf({
+      shelf_title,
+      auth,
+      info,
+      title,
+      author,
+      genre,
+      description,
+    });
+    await fetchUser({ auth, info });
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+export const createBookshelfAndFetchUser = async ({ auth, title, info }) => {
+  try {
+    await createBookshelf({ auth, title });
     await fetchUser({ auth, info });
   } catch (error) {
     console.log('Error: ', error);
