@@ -21,8 +21,12 @@ export default function UserDashboard() {
   );
 
   useEffect(() => {
+    getAllBooks({ books });
+  }, []);
+
+  useEffect(() => {
     if (books.allBooks) {
-      console.log(allBooks);
+      console.log(books.allBooks);
       setDisplayedBooks(books.allBooks);
     }
   }, [books.allBooks]);

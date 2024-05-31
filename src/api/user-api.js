@@ -172,7 +172,7 @@ export const updateBook = async ({
   }
 };
 
-export const getAllBooks = (books) => {
+export const getAllBooks = ({ books }) => {
   axios({
     method: 'get',
     url: `${baseUrl}/get-all-books/`,
