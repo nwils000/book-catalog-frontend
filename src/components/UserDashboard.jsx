@@ -1,7 +1,9 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserInfoContext } from '../context/userInfoContext';
 import { AuthContext } from '../context/authContext';
+import { AllBooksContext } from '../context/allBooksContext';
 import { deleteBookAndFetchUser } from '../api/user-api';
+import { getAllBooks } from '../api/user-api';
 import AddBookForm from './AddBookForm';
 import UpdateBookForm from './UpdateBookForm';
 import '../styles/user-dashboard.css';
@@ -10,9 +12,20 @@ import AddBookshelfForm from './AddBookshelfForm';
 export default function UserDashboard() {
   const { info } = useContext(UserInfoContext);
   const { auth } = useContext(AuthContext);
+  const { books } = useContext(AllBooksContext);
 
   const [selectedBookshelf, setSelectedBookshelf] = useState(null);
   const [updatingBook, setUpdatingBook] = useState(null);
+  const [displayedBooks, setDisplayedBooks] = useState(
+    books.allBooks ? books.allBooks : []
+  );
+
+  useEffect(() => {
+    if (books.allBooks) {
+      console.log(allBooks);
+      setDisplayedBooks(books.allBooks);
+    }
+  }, [books.allBooks]);
 
   const handleDelete = (title, author, shelf_title) => {
     let username = info.username;
@@ -71,7 +84,7 @@ export default function UserDashboard() {
   return (
     <div className="dashboard">
       <p>Hi {info.userInfo.first_name}, manage your bookshelves:</p>
-      {selectedBookshelf && <AddBookshelfForm />}
+      {<AddBookshelfForm />}
       {info.userInfo.bookshelves.map((shelf) => (
         <div key={shelf.id} className="bookshelf">
           <h2 onClick={() => handleSelectBookshelf(shelf)}>{shelf.title}</h2>
@@ -117,6 +130,11 @@ export default function UserDashboard() {
           )}
         </div>
       ))}
+      <div>All Books:</div>
+      {displayedBooks &&
+        displayedBooks.map((book) => {
+          return <div>{book.title}</div>;
+        })}
     </div>
   );
 }

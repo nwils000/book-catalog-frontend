@@ -16,6 +16,7 @@ import Register from './components/Register';
 import UserDashboard from './components/UserDashboard';
 import { AuthContext } from './context/authContext';
 import { UserInfoContext } from './context/userInfoContext';
+import { AllBooksContext } from './context/allBooksContext';
 
 function Layout() {
   return (
@@ -66,6 +67,21 @@ const router = createBrowserRouter([
   },
 ]);
 
+const AllBooksContextProvider = ({ children }) => {
+  const [allBooks, setAllBooks] = useState('');
+
+  const books = {
+    allBooks,
+    setAllBooks,
+  };
+
+  return (
+    <AllBooksContext.Provider value={{ books }}>
+      {children}
+    </AllBooksContext.Provider>
+  );
+};
+
 const UserInfoContextProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState('');
   const [username, setUsername] = useState('');
@@ -98,9 +114,11 @@ const AuthContextProvider = ({ children }) => {
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <UserInfoContextProvider>
-    <AuthContextProvider>
-      <RouterProvider router={router} />
-    </AuthContextProvider>
-  </UserInfoContextProvider>
+  <AllBooksContextProvider>
+    <UserInfoContextProvider>
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+      </AuthContextProvider>
+    </UserInfoContextProvider>
+  </AllBooksContextProvider>
 );

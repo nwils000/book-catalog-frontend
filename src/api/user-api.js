@@ -172,6 +172,20 @@ export const updateBook = async ({
   }
 };
 
+export const getAllBooks = (books) => {
+  axios({
+    method: 'get',
+    url: `${baseUrl}/get-all-books/`,
+  })
+    .then((response) => {
+      books.setAllBooks(response.data);
+    })
+    .catch((error) => {
+      console.log('ERROR: ', error);
+      throw error;
+    });
+};
+
 export const deleteBookAndFetchUser = async ({
   auth,
   info,
